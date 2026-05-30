@@ -4,6 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { MenuItem, CartItem, Order, OptionChoice, Category } from './types';
 import { CATEGORIES, INITIAL_MENU_ITEMS, MOCK_REVIEWS } from './data';
 import Header from './components/Header';
@@ -19,24 +21,11 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   // --- Persistent State ---
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
-    // Force a master one-time cleanup to wipe out all products, categories, cart, and orders
-    const didResetMaster = localStorage.getItem('cardapio_grand_reset_v3');
-    if (!didResetMaster) {
-      localStorage.setItem('cardapio_grand_reset_v3', 'true');
-      localStorage.setItem('cardapio_menu_items', '[]');
-      localStorage.setItem('cardapio_categories', '[]');
-      localStorage.setItem('cardapio_cart', '[]');
-      localStorage.setItem('cardapio_orders', '[]');
-      return [];
-    }
-    const saved = localStorage.getItem('cardapio_menu_items');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   const [categories, setCategories] = useState<Category[]>(() => {
     const saved = localStorage.getItem('cardapio_categories');
-    return saved ? JSON.parse(saved) : [];
+    return saved ? JSON.parse(saved) : CATEGORIES;
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -70,6 +59,31 @@ export default function App() {
   const [cartCustomerName, setCartCustomerName] = useState('');
   const [cartPaymentMethod, setCartPaymentMethod] = useState('PIX');
   const [toast, setToast] = useState<{ message: string; show: boolean }>({ message: '', show: false });
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
+      const lista = snapshot.docs.map((doc) => {
+        const data = doc.data() as Record<string, any>;
+        return {
+          id: doc.id,
+          name: data.name || data.nome || '',
+          description: data.description || data.descricao || '',
+          price: data.price ?? data.preco ?? 0,
+          category: data.category || data.categoria || 'geral',
+          imageUrl: data.imageUrl || data.imageUrl || '',
+          tags: data.tags || [],
+          ingredients: data.ingredients || [],
+          options: data.options || [],
+          available: data.available ?? data.disponivel ?? true,
+          calories: data.calories,
+          prepTime: data.prepTime,
+        } as MenuItem;
+      });
+      setMenuItems(lista);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Auto-hide toast after 2.5 seconds
   useEffect(() => {
@@ -106,16 +120,18 @@ export default function App() {
   }, [orders]);
 
   // --- Menu filters list ---
-  const filteredItems = menuItems.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.ingredients.some((ing) => ing.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredItems = menuItems
+    .filter((item) => item.available)
+    .filter((item) => {
+      const matchesSearch =
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.ingredients.some((ing) => ing.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+      const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    });
 
   // --- Cart Management Actions ---
   const handleAddToCart = (
@@ -233,20 +249,94 @@ export default function App() {
   };
 
   // --- Admin actions ---
-  const handleToggleAvailability = (itemId: string) => {
-    setMenuItems((prev) =>
-      prev.map((i) => (i.id === itemId ? { ...i, available: !i.available } : i))
-    );
-  };
+  const handleToggleAvailability = async (itemId: string) => {
+    const current = menuItems.find((item) => item.id === itemId);
+    if (!current) return;
 
-  const handleDeleteMenuItem = (itemId: string) => {
-    if (window.confirm('Tem certeza que deseja excluir permanentemente este item do cardápio?')) {
-      setMenuItems((prev) => prev.filter((i) => i.id !== itemId));
+    const nextValue = !current.available;
+    setMenuItems((prev) =>
+      prev.map((i) => (i.id === itemId ? { ...i, available: nextValue } : i))
+    );
+
+    try {
+      await updateDoc(doc(db, 'produtos', itemId), {
+        available: nextValue,
+        disponivel: nextValue,
+      });
+    } catch (error) {
+      console.error('Falha ao atualizar disponibilidade no Firestore:', error);
+      setMenuItems((prev) =>
+        prev.map((i) => (i.id === itemId ? { ...i, available: current.available } : i))
+      );
+      alert('Não foi possível atualizar o item. Verifique sua conexão e tente novamente.');
     }
   };
 
-  const handleAddMenuItem = (newItem: MenuItem) => {
-    setMenuItems((prev) => [newItem, ...prev]);
+  const handleDeleteMenuItem = async (itemId: string) => {
+    if (!window.confirm('Tem certeza que deseja excluir permanentemente este item do cardápio?')) {
+      return;
+    }
+
+    try {
+      await deleteDoc(doc(db, 'produtos', itemId));
+    } catch (error) {
+      console.error('Falha ao excluir item no Firestore:', error);
+      alert('Não foi possível excluir o item. Tente novamente.');
+    }
+  };
+
+  const handleAddMenuItem = async (newItem: MenuItem) => {
+    const itemToSave = {
+      ...newItem,
+      available: newItem.available ?? true,
+    };
+
+    setMenuItems((prev) => [itemToSave, ...prev]);
+
+    try {
+      await setDoc(doc(db, 'produtos', itemToSave.id), {
+        name: itemToSave.name,
+        description: itemToSave.description,
+        price: itemToSave.price,
+        category: itemToSave.category,
+        imageUrl: itemToSave.imageUrl,
+        tags: itemToSave.tags,
+        ingredients: itemToSave.ingredients,
+        options: itemToSave.options || [],
+        available: itemToSave.available,
+        disponivel: itemToSave.available,
+        calories: itemToSave.calories ?? null,
+        prepTime: itemToSave.prepTime ?? null,
+      });
+    } catch (error) {
+      console.error('Falha ao salvar item no Firestore:', error);
+      setMenuItems((prev) => prev.filter((item) => item.id !== itemToSave.id));
+      alert('Não foi possível cadastrar o produto. Tente novamente.');
+    }
+  };
+
+  const handleUpdateMenuItem = async (updatedItem: MenuItem) => {
+    setMenuItems((prev) => prev.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
+
+    try {
+      await updateDoc(doc(db, 'produtos', updatedItem.id), {
+        name: updatedItem.name,
+        description: updatedItem.description,
+        price: updatedItem.price,
+        category: updatedItem.category,
+        imageUrl: updatedItem.imageUrl,
+        tags: updatedItem.tags,
+        ingredients: updatedItem.ingredients,
+        options: updatedItem.options || [],
+        available: updatedItem.available,
+        disponivel: updatedItem.available,
+        calories: updatedItem.calories ?? null,
+        prepTime: updatedItem.prepTime ?? null,
+      });
+    } catch (error) {
+      console.error('Falha ao atualizar item no Firestore:', error);
+      alert('Não foi possível atualizar o produto. Tente novamente.');
+    }
   };
 
   const handleUpdateOrderStatus = (orderId: string, status: Order['status']) => {
@@ -261,18 +351,29 @@ export default function App() {
     }
   };
 
-  const handleClearAllData = () => {
-    if (window.confirm('⚠️ ATENÇÃO: Deseja apagar definitivamente todos os dados do aplicativo? Isto removerá todos os pratos, categorias, comandas e itens do carrinho.')) {
-      setMenuItems([]);
-      setCategories([]);
-      setCart([]);
-      setOrders([]);
-      localStorage.setItem('cardapio_menu_items', '[]');
-      localStorage.setItem('cardapio_categories', '[]');
-      localStorage.setItem('cardapio_cart', '[]');
-      localStorage.setItem('cardapio_orders', '[]');
-      alert('Limpeza total concluída! O aplicativo está completamente em branco.');
+  const handleClearAllData = async () => {
+    if (!window.confirm('⚠️ ATENÇÃO: Deseja apagar definitivamente todos os dados do aplicativo? Isto removerá todos os pratos, categorias, comandas e itens do carrinho.')) {
+      return;
     }
+
+    try {
+      const snapshot = await getDocs(collection(db, 'produtos'));
+      await Promise.all(snapshot.docs.map((itemDoc) => deleteDoc(doc(db, 'produtos', itemDoc.id))));
+    } catch (error) {
+      console.error('Falha ao limpar o Firestore:', error);
+      alert('Não foi possível apagar todos os produtos do Firestore. Tente novamente.');
+      return;
+    }
+
+    setMenuItems([]);
+    setCategories([]);
+    setCart([]);
+    setOrders([]);
+    localStorage.setItem('cardapio_menu_items', '[]');
+    localStorage.setItem('cardapio_categories', '[]');
+    localStorage.setItem('cardapio_cart', '[]');
+    localStorage.setItem('cardapio_orders', '[]');
+    alert('Limpeza total concluída! O aplicativo está completamente em branco.');
   };
 
   // Find users active order statuses if any in this session
@@ -978,11 +1079,7 @@ export default function App() {
             onUpdateOrderStatus={handleUpdateOrderStatus}
             onClearAllOrders={handleClearAllOrders}
             onBackToPortal={() => setAppMode('portal')}
-            onUpdateItem={(updatedItem) => {
-              setMenuItems((prev) => 
-                prev.map((it) => it.id === updatedItem.id ? updatedItem : it)
-              );
-            }}
+            onUpdateItem={handleUpdateMenuItem}
             onNavigateTo={(mode) => setAppMode(mode)}
             onAddCategory={(newCat) => setCategories((prev) => [...prev, newCat])}
             onDeleteCategory={(catId) => setCategories((prev) => prev.filter((c) => c.id !== catId))}
