@@ -52,14 +52,17 @@ export default function App() {
   // --- UI/UX States ---
   const [appMode, setAppMode] = useState<'portal' | 'menu' | 'admin' | 'kitchen'>(() => {
     const saved = localStorage.getItem('cardapio_app_mode');
-    return (saved as any) || 'portal';
+    if ((saved as any) === 'portal') {
+      return 'menu';
+    }
+    return (saved as any) || 'menu';
   });
   const [adminPinInput, setAdminPinInput] = useState('');
   const [pinError, setPinError] = useState('');
   const [kitchenPinInput, setKitchenPinInput] = useState('');
   const [kitchenPinError, setKitchenPinError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTable, setSelectedTable] = useState('Mesa 1');
+  const [selectedTable, setSelectedTable] = useState('Balcão 1');
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -312,14 +315,14 @@ export default function App() {
 
                 <div className="pt-2">
                   <label className="block text-[9px] font-mono uppercase tracking-wider text-stone-400 mb-1.5 font-bold">
-                    Sua Mesa ou Balcão:
+                    Seu Balcão:
                   </label>
                   <select
                     value={selectedTable}
                     onChange={(e) => setSelectedTable(e.target.value)}
                     className="w-full bg-stone-50 border border-stone-200 text-stone-800 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#f48005] cursor-pointer"
                   >
-                    {['Balcão 1', 'Balcão 2', 'Mesa 1', 'Mesa 2', 'Mesa 3', 'Mesa 4', 'Mesa 5', 'Mesa 6', 'Mesa 8', 'Mesa 10', 'Mesa 12'].map((t) => (
+                    {['Balcão 1'].map((t) => (
                       <option key={t} value={t}>{t}</option>
                     ))}
                   </select>

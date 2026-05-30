@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, ShoppingBag, IceCream } from 'lucide-react';
 
 interface HeaderProps {
@@ -25,7 +25,25 @@ export default function Header({
   openCart,
   onBackToPortal
 }: HeaderProps) {
-  const tables = ['Balcão 1', 'Balcão 2', 'Mesa 1', 'Mesa 2', 'Mesa 3', 'Mesa 4', 'Mesa 5', 'Mesa 6', 'Mesa 8', 'Mesa 10', 'Mesa 12'];
+  const [secretClicks, setSecretClicks] = useState(0);
+  const tables = ['Balcão 1'];
+
+  useEffect(() => {
+    if (secretClicks === 0) return;
+    const timer = window.setTimeout(() => setSecretClicks(0), 3000);
+    return () => window.clearTimeout(timer);
+  }, [secretClicks]);
+
+  const handleLogoClick = () => {
+    setSecretClicks((current) => {
+      const next = current + 1;
+      if (next >= 5) {
+        onBackToPortal();
+        return 0;
+      }
+      return next;
+    });
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF9F6]/95 backdrop-blur-md border-b border-stone-200" id="app-header">
@@ -35,8 +53,9 @@ export default function Header({
           {/* Logo & Branding - Orange Ice Cream icon and text */}
           <div className="flex items-center justify-between">
             <div 
-              onClick={onBackToPortal} 
+              onClick={handleLogoClick} 
               className="cursor-pointer flex items-center gap-2 group select-none"
+              title="Clique cinco vezes para o portal secreto"
             >
               <IceCream size={26} className="text-[#f48000] fill-transparent stroke-2 group-hover:scale-110 transition-transform duration-150" />
               <h1 className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-[#f48000] select-none">
@@ -94,16 +113,6 @@ export default function Header({
                 ))}
               </select>
             </div>
-
-            {/* Back to Launcher Portal Button */}
-            <button
-              type="button"
-              onClick={onBackToPortal}
-              className="px-4 py-2 border border-stone-200 rounded-full text-stone-600 bg-white text-[11px] font-medium tracking-wide cursor-pointer hover:bg-stone-50 hover:text-stone-900 transition-colors duration-150 shadow-xs"
-              id="back-to-portal-btn"
-            >
-              Portal
-            </button>
 
             {/* Desktop Cart Button */}
             <button
