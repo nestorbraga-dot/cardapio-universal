@@ -1070,10 +1070,6 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="border border-stone-200 p-3 bg-white text-[10px] text-stone-500 leading-relaxed text-left font-light">
-                Para visualizar as etapas de preparo, retorne ao portal inicial e insira a senha de acesso à cozinha em tempo real.
-              </div>
-
               <button
                 type="button"
                 onClick={() => setSuccessOrder(null)}
