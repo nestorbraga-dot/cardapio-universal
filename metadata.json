@@ -1,0 +1,6 @@
+{
+  "name": "Doce Sabor",
+  "description": "Um cardápio digital moderno e interativo para sorvetes, lanches, sobremesas e bebidas com filtros, busca e carrinho de compras em tempo real.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
