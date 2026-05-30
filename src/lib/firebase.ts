@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAtgdZNhMPHydgd7CK24RkUCff6x1tNggU",
-  authDomain: "cardapio-universal.firebaseapp.com",
-  projectId: "cardapio-universal",
-  storageBucket: "cardapio-universal.firebasestorage.app",
-  messagingSenderId: "117239972317",
-  appId: "1:117239972317:web:e23efbbed0e0a2b78ab634"
+  apiKey: "AIzaSyDSX9D0rsc4fZANbg_u60xY_Su4SxtGOVU",
+  authDomain: "cardapio-universal-um.firebaseapp.com",
+  projectId: "cardapio-universal-um",
+  storageBucket: "cardapio-universal-um.firebasestorage.app",
+  messagingSenderId: "1097365163502",
+  appId: "1:1097365163502:web:4aa094776c7ab6066592ff"
 };
 
 const app = initializeApp(firebaseConfig);
