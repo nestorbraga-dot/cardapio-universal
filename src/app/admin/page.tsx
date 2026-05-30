@@ -38,29 +38,11 @@ export default function AdminPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    const produtosQuery = query(collection(db, 'produtos'), orderBy('nome', 'asc'));
-
-    const unsubscribe = onSnapshot(
-      produtosQuery,
-      (snapshot) => {
-        const items = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Produto, 'id'>),
-        }));
-
-        setProdutos(items);
-        setIsLoading(false);
-      },
-      (error) => {
-        console.error('Erro ao ler produtos do admin:', error);
-        setMessage({
-          type: 'error',
-          text: 'Não foi possível carregar os itens. Atualize a página e tente novamente.',
-        });
-        setIsLoading(false);
-      }
-    );
-
+    // Lê direto da coleção do Firebase online em tempo real
+    const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
+      const lista = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setProdutos(lista as Produto[]);
+    });
     return () => unsubscribe();
   }, []);
 
@@ -77,16 +59,15 @@ export default function AdminPage() {
     setIsSubmitting(true);
 
     try {
+      // Grava na nuvem real, fazendo aparecer em qualquer navegador ou celular
       await addDoc(collection(db, 'produtos'), {
         nome: nome.trim(),
         preco: precoValor,
         descricao: descricao.trim(),
-        categoria: 'geral',
         disponivel: true,
+        categoria: 'geral'
       });
-      setNome('');
-      setPreco('');
-      setDescricao('');
+      setNome(''); setPreco(''); setDescricao('');
       setMessage({ type: 'success', text: 'Item cadastrado com sucesso.' });
     } catch (error) {
       console.error('Falha ao cadastrar produto:', error);
