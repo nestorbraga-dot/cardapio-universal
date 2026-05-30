@@ -369,7 +369,7 @@ export default function App() {
                     className="w-full bg-stone-50 border border-stone-200 text-stone-850 text-xs rounded-xl px-3 py-2 text-center font-mono focus:outline-none focus:border-[#f48000]"
                   />
                   <div className="flex items-center justify-between text-[8px] font-mono text-stone-400">
-                    <span>PADRÃO: 1234</span>
+                    <span>Insira sua senha secreta</span>
                     {kitchenPinError && <span className="text-rose-500 font-bold">{kitchenPinError}</span>}
                   </div>
                 </div>
@@ -378,7 +378,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => {
-                  if (kitchenPinInput === '1234') {
+                  if (kitchenPinInput === 'desafio/app') {
                     setAppMode('kitchen');
                     setKitchenPinInput('');
                     setKitchenPinError('');
@@ -423,7 +423,7 @@ export default function App() {
                     className="w-full bg-stone-50 border border-stone-200 text-stone-850 text-xs rounded-xl px-3 py-2 text-center font-mono focus:outline-none focus:border-[#f48000]"
                   />
                   <div className="flex items-center justify-between text-[8px] font-mono text-stone-400">
-                    <span>PADRÃO: 1234</span>
+                    <span>Insira sua senha secreta</span>
                     {pinError && <span className="text-rose-500 font-bold">{pinError}</span>}
                   </div>
                 </div>
@@ -432,7 +432,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => {
-                  if (adminPinInput === '1234') {
+                  if (adminPinInput === 'desafio/app') {
                     setAppMode('admin');
                     setAdminPinInput('');
                     setPinError('');
@@ -1071,7 +1071,7 @@ export default function App() {
               </div>
 
               <div className="border border-stone-200 p-3 bg-white text-[10px] text-stone-500 leading-relaxed text-left font-light">
-                Para visualizar as etapas de preparo, retorne ao portal inicial e use o PIN <span className="font-mono font-semibold">1234</span> para acessar a cozinha em tempo real.
+                Para visualizar as etapas de preparo, retorne ao portal inicial e insira a senha de acesso à cozinha em tempo real.
               </div>
 
               <button
