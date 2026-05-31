@@ -309,7 +309,7 @@ export default function AdminPanel({
     <div className="min-h-screen bg-[#FAF9F6] flex flex-col font-sans text-stone-950 text-left select-none" id="admin-application-layer">
       
       {/* Orange Solid Navbar (matches Screenshot 2) */}
-      <header className="bg-[#f48000] px-6 py-4 flex items-center justify-between text-white border-b border-orange-600 shadow-md">
+      <header className="bg-[#B576AD] px-6 py-4 flex items-center justify-between text-white border-b border-[#9E5D96] shadow-md">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white">
             <Sliders size={20} strokeWidth={2.5} />
@@ -368,7 +368,7 @@ export default function AdminPanel({
             onClick={() => setActiveTab('inventory')}
             className={`flex items-center gap-1.5 px-5 py-2.5 rounded-[1rem] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === 'inventory'
-                ? 'bg-[#f48000] text-white font-black shadow-sm'
+                ? 'bg-[#B576AD] text-white font-black shadow-sm'
                 : 'text-stone-500 hover:text-stone-900 bg-transparent hover:bg-stone-50'
             }`}
           >
@@ -381,7 +381,7 @@ export default function AdminPanel({
             onClick={() => setActiveTab('categories')}
             className={`flex items-center gap-1.5 px-5 py-2.5 rounded-[1rem] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === 'categories'
-                ? 'bg-[#f48000] text-white font-black shadow-sm'
+                ? 'bg-[#B576AD] text-white font-black shadow-sm'
                 : 'text-stone-500 hover:text-stone-900 bg-transparent hover:bg-stone-50'
             }`}
           >
@@ -394,7 +394,7 @@ export default function AdminPanel({
             onClick={() => setActiveTab('billing')}
             className={`flex items-center gap-1.5 px-5 py-2.5 rounded-[1rem] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === 'billing'
-                ? 'bg-[#f48000] text-white font-black shadow-sm'
+                ? 'bg-[#B576AD] text-white font-black shadow-sm'
                 : 'text-stone-500 hover:text-stone-900 bg-transparent hover:bg-stone-50'
             }`}
           >
@@ -407,7 +407,7 @@ export default function AdminPanel({
             onClick={() => setActiveTab('banner')}
             className={`flex items-center gap-1.5 px-5 py-2.5 rounded-[1rem] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === 'banner'
-                ? 'bg-[#f48000] text-white font-black shadow-sm'
+                ? 'bg-[#B576AD] text-white font-black shadow-sm'
                 : 'text-stone-500 hover:text-stone-900 bg-transparent hover:bg-stone-50'
             }`}
           >
@@ -438,14 +438,14 @@ export default function AdminPanel({
                     value={invSearchQuery}
                     onChange={(e) => setInvSearchQuery(e.target.value)}
                     placeholder="Filtrar pratos..."
-                    className="pl-8 pr-4 py-1.5 bg-stone-50 border border-stone-250 rounded-xl focus:outline-none focus:border-[#f48000] text-xs text-stone-800"
+                    className="pl-8 pr-4 py-1.5 bg-stone-50 border border-stone-250 rounded-xl focus:outline-none focus:border-[#B576AD] text-xs text-stone-800"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleOpenAddModal}
-                  className="px-4 py-2 bg-[#f48000] hover:bg-orange-600 text-white font-mono text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1 border border-orange-550 shadow-3xs"
+                  className="px-4 py-2 bg-[#B576AD] hover:bg-[#9E5D96] text-white font-mono text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1 border border-[#B576AD] shadow-3xs"
                 >
                   <Plus size={12} strokeWidth={3} />
                   <span>Novo Produto</span>
@@ -579,7 +579,7 @@ export default function AdminPanel({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* List categories */}
               <div className="space-y-4">
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#f48000] block">Categorias Ativas ({categories.length})</span>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#B576AD] block">Categorias Ativas ({categories.length})</span>
                 <div className="divide-y divide-stone-150 border border-stone-200 bg-[#FAF9F6] rounded-2xl overflow-hidden shadow-3xs">
                   {categories.map((cat, idx) => (
                     <div key={cat.id || idx} className="flex justify-between items-center p-4 bg-white hover:bg-stone-50/50 transition-colors">
@@ -623,7 +623,7 @@ export default function AdminPanel({
               <div className="space-y-6">
                 {/* Form column box */}
                 <div className="p-5 bg-[#FAF9F6] border border-stone-200 rounded-2xl shadow-3xs text-left space-y-4">
-                  <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#f48000] block">Nova Categoria</span>
+                  <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#B576AD] block">Nova Categoria</span>
                   <form onSubmit={handleCreateCategory} className="space-y-3">
                     <div className="space-y-1">
                       <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 block">Nome da Categoria</label>
@@ -633,7 +633,7 @@ export default function AdminPanel({
                         value={newCatName}
                         onChange={(e) => setNewCatName(e.target.value)}
                         placeholder="Ex: Cafés Especiais, Waffles, Entradas"
-                        className="w-full px-3 py-2 border border-stone-250 bg-white rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                        className="w-full px-3 py-2 border border-stone-250 bg-white rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                       />
                     </div>
                     
@@ -644,13 +644,13 @@ export default function AdminPanel({
                         value={newCatDesc}
                         onChange={(e) => setNewCatDesc(e.target.value)}
                         placeholder="Ex: Grãos selecionados moídos na hora e cappuccinos."
-                        className="w-full px-3 py-2 border border-stone-250 bg-white rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                        className="w-full px-3 py-2 border border-stone-250 bg-white rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-2 bg-[#f48000] hover:bg-orange-600 text-white font-mono text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-orange-550 shadow-3xs"
+                      className="w-full py-2 bg-[#B576AD] hover:bg-[#9E5D96] text-white font-mono text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-[#B576AD] shadow-3xs"
                     >
                       <Plus size={11} strokeWidth={3} />
                       <span>Adicionar Categoria</span>
@@ -659,9 +659,9 @@ export default function AdminPanel({
                 </div>
 
                 {/* Categorias tutorial disclaimer */}
-                <div className="p-5 bg-orange-50/40 border border-orange-200/50 rounded-2xl flex flex-col justify-between space-y-4">
+                <div className="p-5 bg-[#F5EAF5]/40 border border-[#D4A5C5]/50 rounded-2xl flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
-                    <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-[#f48000]">
+                    <div className="w-8 h-8 rounded-lg bg-[#B576AD]/10 flex items-center justify-center text-[#B576AD]">
                       <Layers size={16} />
                     </div>
                     <h4 className="text-stone-900 font-sans font-bold text-sm uppercase">Estrutura Inteligente</h4>
@@ -671,7 +671,7 @@ export default function AdminPanel({
                   </div>
 
                   <div className="text-[10px] font-mono text-stone-400 flex items-center gap-1 bg-white border border-stone-200 px-3 py-1.5 rounded-lg w-fit">
-                    <Info size={11} className="text-[#f48000]" />
+                    <Info size={11} className="text-[#B576AD]" />
                     <span>Dúvidas em customização? Contate o Administrador.</span>
                   </div>
                 </div>
@@ -688,8 +688,8 @@ export default function AdminPanel({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="border border-stone-200 p-4.5 bg-white rounded-2xl shadow-3xs text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#f48000] font-bold">Faturamento (Líquido)</span>
-                  <TrendingUp size={16} className="text-[#f48000]" />
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#B576AD] font-bold">Faturamento (Líquido)</span>
+                  <TrendingUp size={16} className="text-[#B576AD]" />
                 </div>
                 <div className="font-mono text-xl font-black text-stone-900 mt-1.5">R$ {salesTotal.toFixed(2)}</div>
                 <div className="text-[9px] text-stone-400 mt-1 font-mono uppercase font-bold">Apenas Comandas Entregues</div>
@@ -697,7 +697,7 @@ export default function AdminPanel({
 
               <div className="border border-stone-200 p-4.5 bg-white rounded-2xl shadow-3xs text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#f48000] font-bold">Arrecadação Potencial</span>
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#B576AD] font-bold">Arrecadação Potencial</span>
                   <Clock size={16} className="text-amber-500" />
                 </div>
                 <div className="font-mono text-xl font-black text-stone-900 mt-1.5">R$ {pendingSalesTotal.toFixed(2)}</div>
@@ -706,7 +706,7 @@ export default function AdminPanel({
 
               <div className="border border-stone-200 p-4.5 bg-white rounded-2xl shadow-3xs text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#f48000] font-bold">Ticket Médio</span>
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#B576AD] font-bold">Ticket Médio</span>
                   <CreditCard size={16} className="text-stone-600" />
                 </div>
                 <div className="font-mono text-xl font-black text-stone-900 mt-1.5">
@@ -717,7 +717,7 @@ export default function AdminPanel({
 
               <div className="border border-stone-200 p-4.5 bg-white rounded-2xl shadow-3xs text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#f48000] font-bold">Giro de Comandas</span>
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-[#B576AD] font-bold">Giro de Comandas</span>
                   <ChefHat size={16} className="text-stone-880" />
                 </div>
                 <div className="font-mono text-xl font-black text-stone-900 mt-1.5">
@@ -742,11 +742,11 @@ export default function AdminPanel({
                       <div key={method} className="space-y-1">
                         <div className="flex justify-between text-xs font-bold text-stone-850">
                           <span>{method}</span>
-                          <span className="font-mono font-black text-[#f48000]">R$ {value.toFixed(2)} ({percent}%)</span>
+                          <span className="font-mono font-black text-[#B576AD]">R$ {value.toFixed(2)} ({percent}%)</span>
                         </div>
                         <div className="w-full h-2.5 bg-stone-100 rounded-full border border-stone-150 overflow-hidden">
                           <div 
-                            className="h-full bg-[#f48000] rounded-full transition-all duration-500"
+                            className="h-full bg-[#B576AD] rounded-full transition-all duration-500"
                             style={{ width: `${percent}%` }}
                           />
                         </div>
@@ -782,7 +782,7 @@ export default function AdminPanel({
                       </div>
                       <div className="text-right">
                         <span className="font-black text-stone-900">{seller.quantity} unidades</span>
-                        <p className="text-[10px] font-mono text-[#f48000] font-bold">R$ {seller.revenue.toFixed(2)}</p>
+                        <p className="text-[10px] font-mono text-[#B576AD] font-bold">R$ {seller.revenue.toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -797,9 +797,9 @@ export default function AdminPanel({
 
             {/* Danger Area and clear orders option */}
             <div className="space-y-4">
-              <div className="bg-[#FFF4E5] border border-orange-250 rounded-2xl p-5 text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-[#F8EEF8] border border-[#D4A5C5] rounded-2xl p-5 text-left flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono font-black text-orange-850 uppercase tracking-widest bg-orange-100 px-2.5 py-0.5 rounded">Zona Operacional</span>
+                  <span className="text-[10px] font-mono font-black text-[#9E5D96] uppercase tracking-widest bg-[#F0E0F0] px-2.5 py-0.5 rounded">Zona Operacional</span>
                   <h5 className="font-sans text-stone-900 font-black text-sm uppercase">Fechar o Turno de Hoje</h5>
                   <p className="text-xs text-stone-600 font-light max-w-xl">Isto apagará com segurança todo o histórico local de comandas finalizadas, preparando o faturamento para o turno do próximo dia.</p>
                 </div>
@@ -845,7 +845,7 @@ export default function AdminPanel({
             </div>
 
             <div className="space-y-4">
-              <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#f48000]">Preset de Capa Selecionado: {storeCover}</span>
+              <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#B576AD]">Preset de Capa Selecionado: {storeCover}</span>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
                 {coverPresets.map((preset) => {
@@ -854,8 +854,8 @@ export default function AdminPanel({
                     <div 
                       key={preset.name}
                       onClick={() => handleSelectPreset(preset.name, preset.url)}
-                      className={`border bg-white rounded-2xl overflow-hidden shadow-3xs cursor-pointer hover:border-[#f48000] transition-all flex flex-col justify-between ${
-                        isSelected ? 'border-[#f48000] ring-2 ring-orange-100' : 'border-stone-200'
+                      className={`border bg-white rounded-2xl overflow-hidden shadow-3xs cursor-pointer hover:border-[#B576AD] transition-all flex flex-col justify-between ${
+                        isSelected ? 'border-[#B576AD] ring-2 ring-[#E8D0E8]' : 'border-stone-200'
                       }`}
                     >
                       <img 
@@ -871,7 +871,7 @@ export default function AdminPanel({
                       
                       <div className="px-4 pb-4.5 flex justify-end">
                         <div className={`px-2.5 py-1 text-[9px] font-mono font-extrabold uppercase rounded ${
-                          isSelected ? 'bg-[#f48000] text-white' : 'bg-stone-50 text-stone-400 border border-stone-150'
+                          isSelected ? 'bg-[#B576AD] text-white' : 'bg-stone-50 text-stone-400 border border-stone-150'
                         }`}>
                           {isSelected ? 'Ativo' : 'Selecionar'}
                         </div>
@@ -883,7 +883,7 @@ export default function AdminPanel({
 
               {/* Cover Preview mockup */}
               <div className="pt-6">
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#f48000] block mb-2">Simulação de Capa Promocional do Cliente:</span>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-[#B576AD] block mb-2">Simulação de Capa Promocional do Cliente:</span>
                 <div className="relative overflow-hidden rounded-3xl bg-[#7A3F02] text-left p-8 sm:p-12 shadow px-8 h-44 flex flex-col justify-center">
                   {/* Photo wallpaper */}
                   <img 
@@ -895,7 +895,7 @@ export default function AdminPanel({
                   <div className="absolute inset-0 bg-[#7A3F02]/85 md:bg-transparent md:bg-gradient-to-r md:from-[#512701] md:to-transparent z-0" />
 
                   <div className="relative z-10 max-w-sm space-y-2">
-                    <span className="text-[9px] font-mono uppercase bg-[#f48000] text-white px-2 py-0.5 rounded font-black w-fit block">Banner Ativo</span>
+                    <span className="text-[9px] font-mono uppercase bg-[#B576AD] text-white px-2 py-0.5 rounded font-black w-fit block">Banner Ativo</span>
                     <h2 className="text-xl sm:text-2xl font-extrabold text-[#ffa31a] tracking-tight uppercase leading-snug">
                       O Melhor Sorvete da Cidade
                     </h2>
@@ -941,7 +941,7 @@ export default function AdminPanel({
               </button>
 
               <div className="mb-6 flex items-center gap-2">
-                <PlusCircle size={20} className="text-[#f48000]" />
+                <PlusCircle size={20} className="text-[#B576AD]" />
                 <h4 className="font-sans text-base font-black text-stone-900 uppercase">Cadastrar Novo Produto</h4>
               </div>
 
@@ -956,7 +956,7 @@ export default function AdminPanel({
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
                       placeholder="Ex: Taça Prestígio Suprema"
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
 
@@ -970,7 +970,7 @@ export default function AdminPanel({
                       value={formPrice}
                       onChange={(e) => setFormPrice(e.target.value)}
                       placeholder="Ex: 24.90"
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -982,7 +982,7 @@ export default function AdminPanel({
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000] cursor-pointer"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD] cursor-pointer"
                     >
                       {categories.map(cat => (
                         <option key={cat.id} value={cat.id}>{cat.name.toUpperCase()}</option>
@@ -998,7 +998,7 @@ export default function AdminPanel({
                       value={formImageUrl}
                       onChange={(e) => setFormImageUrl(e.target.value)}
                       placeholder="Foto via Unsplash"
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -1011,7 +1011,7 @@ export default function AdminPanel({
                     value={formDesc}
                     onChange={(e) => setFormDesc(e.target.value)}
                     placeholder="Bolas de sorvete, trufa de chocolate, coco ralado..."
-                    className="w-full h-16 px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000] resize-none"
+                    className="w-full h-16 px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD] resize-none"
                   />
                 </div>
 
@@ -1024,7 +1024,7 @@ export default function AdminPanel({
                       value={formIngredients}
                       onChange={(e) => setFormIngredients(e.target.value)}
                       placeholder="Morango fresco, calda de avelã..."
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
 
@@ -1035,7 +1035,7 @@ export default function AdminPanel({
                       value={formTags}
                       onChange={(e) => setFormTags(e.target.value)}
                       placeholder="Novo, Vegano, Artesanal..."
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -1050,7 +1050,7 @@ export default function AdminPanel({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#f48000] hover:bg-orange-600 border border-orange-550 shadow-3xs text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                    className="px-5 py-2 bg-[#B576AD] hover:bg-[#9E5D96] border border-[#B576AD] shadow-3xs text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
                   >
                     Salvar Produto
                   </button>
@@ -1088,7 +1088,7 @@ export default function AdminPanel({
               </button>
 
               <div className="mb-6 flex items-center gap-2">
-                <Edit3 size={20} className="text-[#f48000]" />
+                <Edit3 size={20} className="text-[#B576AD]" />
                 <h4 className="font-sans text-base font-black text-stone-900 uppercase">Editar Especificações de Produto</h4>
               </div>
 
@@ -1103,7 +1103,7 @@ export default function AdminPanel({
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
                       placeholder="Ex: Doce de Cupuaçu"
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
 
@@ -1117,7 +1117,7 @@ export default function AdminPanel({
                       value={formPrice}
                       onChange={(e) => setFormPrice(e.target.value)}
                       placeholder="Ex: 24.90"
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -1129,7 +1129,7 @@ export default function AdminPanel({
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000] cursor-pointer"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD] cursor-pointer"
                     >
                       {categories.map(cat => (
                         <option key={cat.id} value={cat.id}>{cat.name.toUpperCase()}</option>
@@ -1145,7 +1145,7 @@ export default function AdminPanel({
                       value={formImageUrl}
                       onChange={(e) => setFormImageUrl(e.target.value)}
                       placeholder="Link da imagem..."
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -1158,7 +1158,7 @@ export default function AdminPanel({
                     value={formDesc}
                     onChange={(e) => setFormDesc(e.target.value)}
                     placeholder="Bolas de sorvete, trufa de chocolate, coco ralado..."
-                    className="w-full h-16 px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000] resize-none"
+                    className="w-full h-16 px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD] resize-none"
                   />
                 </div>
 
@@ -1171,7 +1171,7 @@ export default function AdminPanel({
                       value={formIngredients}
                       onChange={(e) => setFormIngredients(e.target.value)}
                       placeholder="Morango fresco, calda de avelã..."
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
 
@@ -1182,7 +1182,7 @@ export default function AdminPanel({
                       value={formTags}
                       onChange={(e) => setFormTags(e.target.value)}
                       placeholder="Novo, Vegano, Artesanal..."
-                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#f48000]"
+                      className="w-full px-3 py-2 border border-stone-250 bg-stone-50 rounded-xl text-xs focus:outline-none focus:border-[#B576AD]"
                     />
                   </div>
                 </div>
@@ -1197,7 +1197,7 @@ export default function AdminPanel({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#f48000] hover:bg-orange-600 border border-orange-550 shadow-3xs text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                    className="px-5 py-2 bg-[#B576AD] hover:bg-[#9E5D96] border border-[#B576AD] shadow-3xs text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
                   >
                     Salvar Alterações
                   </button>
