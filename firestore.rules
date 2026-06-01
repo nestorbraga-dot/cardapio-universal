@@ -2,21 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Cardapio: leitura liberada para clientes, escrita para admin autenticado
-    match /menuItems/{itemId} {
-      allow read: if true;
-      allow write: if request.auth != null && request.auth.token.role == 'admin';
-    }
-
-    match /categories/{catId} {
-      allow read: if true;
-      allow write: if request.auth != null && request.auth.token.role == 'admin';
-    }
-
-    // Pedidos: clientes podem criar, admin pode ler/atualizar
-    match /orders/{orderId} {
-      allow create: if true;
-      allow read, update: if request.auth != null && request.auth.token.role == 'admin';
+    // Cardápio, categorias e pedidos: liberado para leitura e escrita
+    // O controle de acesso é feito via PIN (cliente-side) — sem Firebase Auth
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }
