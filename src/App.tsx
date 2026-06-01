@@ -32,6 +32,7 @@ export default function App() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // --- UI/UX States (localStorage) ---
   const [appMode, setAppMode] = useState<'portal' | 'menu' | 'admin' | 'kitchen'>(() => {
@@ -62,21 +63,24 @@ export default function App() {
 
   const [successOrder, setSuccessOrder] = useState<Order | null>(null);
 
-  // --- Firestore Real-time Listeners ---
+  // --- Firestore Data Fetching ---
   useEffect(() => {
-    const unsubMenuItems = onSnapshot(collection(db, 'menuItems'), (snapshot) => {
+    const fetchMenuItems = async () => {
+      const snapshot = await getDocs(collection(db, 'menuItems'));
       if (snapshot.empty && !seeded.current) {
         seeded.current = true;
-        INITIAL_MENU_ITEMS.forEach(async (item) => {
-          await setDoc(doc(db, 'menuItems', item.id), item);
-        });
-        CATEGORIES.forEach(async (cat) => {
-          await setDoc(doc(db, 'categories', cat.id), cat);
-        });
+        await Promise.all([
+          ...INITIAL_MENU_ITEMS.map((item) => setDoc(doc(db, 'menuItems', item.id), item)),
+          ...CATEGORIES.map((cat) => setDoc(doc(db, 'categories', cat.id), cat)),
+        ]);
+        const refetch = await getDocs(collection(db, 'menuItems'));
+        setMenuItems(refetch.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
       } else {
         setMenuItems(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
       }
-    });
+      setLoading(false);
+    };
+    fetchMenuItems();
 
     const unsubCategories = onSnapshot(collection(db, 'categories'), (snapshot) => {
       if (!snapshot.empty) {
@@ -91,7 +95,6 @@ export default function App() {
     });
 
     return () => {
-      unsubMenuItems();
       unsubCategories();
       unsubOrders();
     };
@@ -294,6 +297,17 @@ export default function App() {
 
   // --- Computed ---
   const tableOrders = orders.filter((o) => o.tableNumber === selectedTable);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center gap-5 px-4">
+        <div className="w-10 h-10 border-[3px] border-[#f48000] border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm font-mono text-stone-400 uppercase tracking-[0.2em] font-semibold">
+          Carregando cardápio...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-amber-600/10 selection:text-amber-800 flex flex-col" id="main-application-frame">
