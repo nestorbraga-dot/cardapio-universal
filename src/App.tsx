@@ -33,6 +33,7 @@ export default function App() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [firestoreError, setFirestoreError] = useState<string | null>(null);
 
   // --- UI/UX States (localStorage) ---
   const [appMode, setAppMode] = useState<'portal' | 'menu' | 'admin' | 'kitchen'>(() => {
@@ -66,33 +67,46 @@ export default function App() {
   // --- Firestore Data Fetching ---
   useEffect(() => {
     const fetchMenuItems = async () => {
-      const snapshot = await getDocs(collection(db, 'menuItems'));
-      if (snapshot.empty && !seeded.current) {
-        seeded.current = true;
-        await Promise.all([
-          ...INITIAL_MENU_ITEMS.map((item) => setDoc(doc(db, 'menuItems', item.id), item)),
-          ...CATEGORIES.map((cat) => setDoc(doc(db, 'categories', cat.id), cat)),
-        ]);
-        const refetch = await getDocs(collection(db, 'menuItems'));
-        setMenuItems(refetch.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
-      } else {
-        setMenuItems(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
+      try {
+        const snapshot = await getDocs(collection(db, 'menuItems'));
+        if (snapshot.empty && !seeded.current) {
+          seeded.current = true;
+          await Promise.all([
+            ...INITIAL_MENU_ITEMS.map((item) => setDoc(doc(db, 'menuItems', item.id), item)),
+            ...CATEGORIES.map((cat) => setDoc(doc(db, 'categories', cat.id), cat)),
+          ]);
+          const refetch = await getDocs(collection(db, 'menuItems'));
+          setMenuItems(refetch.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
+        } else {
+          setMenuItems(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as MenuItem)));
+        }
+      } catch (err: any) {
+        setFirestoreError(err?.message || 'Erro ao carregar cardápio do Firebase');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchMenuItems();
 
-    const unsubCategories = onSnapshot(collection(db, 'categories'), (snapshot) => {
-      if (!snapshot.empty) {
-        setCategories(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as Category)));
-      }
-    });
+    const unsubCategories = onSnapshot(
+      collection(db, 'categories'),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          setCategories(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as Category)));
+        }
+      },
+      (err) => setFirestoreError(err?.message || 'Erro ao ouvir categorias')
+    );
 
-    const unsubOrders = onSnapshot(collection(db, 'orders'), (snapshot) => {
-      if (!snapshot.empty) {
-        setOrders(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as unknown as Order)));
-      }
-    });
+    const unsubOrders = onSnapshot(
+      collection(db, 'orders'),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          setOrders(snapshot.docs.map((d) => ({ ...d.data(), id: d.id } as unknown as Order)));
+        }
+      },
+      (err) => setFirestoreError(err?.message || 'Erro ao ouvir pedidos')
+    );
 
     return () => {
       unsubCategories();
@@ -298,13 +312,29 @@ export default function App() {
   // --- Computed ---
   const tableOrders = orders.filter((o) => o.tableNumber === selectedTable);
 
-  if (loading) {
+  if (loading || firestoreError) {
     return (
       <div className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center gap-5 px-4">
-        <div className="w-10 h-10 border-[3px] border-[#f48000] border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-mono text-stone-400 uppercase tracking-[0.2em] font-semibold">
-          Carregando cardápio...
-        </p>
+        {firestoreError ? (
+          <>
+            <div className="p-4 bg-red-50 rounded-full border border-red-200">
+              <AlertCircle size={32} className="text-red-500" />
+            </div>
+            <div className="text-center max-w-xs space-y-1">
+              <p className="text-sm font-bold text-red-600">Erro de conexão</p>
+              <p className="text-xs font-mono text-red-400/80 break-words">
+                {firestoreError}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="w-10 h-10 border-[3px] border-[#f48000] border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm font-mono text-stone-400 uppercase tracking-[0.2em] font-semibold">
+              Carregando cardápio...
+            </p>
+          </>
+        )}
       </div>
     );
   }
